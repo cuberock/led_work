@@ -1,16 +1,9 @@
-//setup
 
 #include "FS.h"
 #include "SPIFFS.h"
 #define FORMAT_SPIFFS_IF_FAILED true
 
-//This example code is in the Public Domain (or CC0 licensed, at your option.)
-//By Evandro Copercini - 2018
-//
-//This example creates a bridge between Serial and Classical Bluetooth (SPP)
-//and also demonstrate that SerialBT have the same functionalities of a normal Serial
-
-#include "BluetoothSerial.h"
+//include "BluetoothSerial.h"
 
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
@@ -38,34 +31,6 @@ int ledB = 0;
 
 const char* ssid = "***";
 const char* password = "***";
-
-/*
-WiFiClient getWiFiClient(char* ssid, char* password){
-  Serial.println("getWiFiClient_start");
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    delay(500);
-  }
-  WiFiClient client;
-  return client;
-}
-
-String getResponse(WiFiClient client, String url){
-  Serial.println("getResponse_start_url = " + url);
-  String result = "";
-  HTTPClient http;
-  if (!http.begin(client, url)) {
-    Serial.println("if (!http.begin(client, url)) {");
-    return result;
-  }
-  int responseCode = http.GET();
-  result = http.getString();
-  http.end();
-  Serial.println(result);
-  return result;
-}
-*/
 
 String getResponse(String url){
   String result = "";
@@ -195,20 +160,12 @@ void setup() {
   pinMode(LED_PIN, OUTPUT);
   // スイッチの入力
   pinMode(SWITCH_PIN, INPUT_PULLUP);
-
   if(!SPIFFS.begin(FORMAT_SPIFFS_IF_FAILED)){
     Serial.println("SPIFFS Mount Failed");
     return;
   }
-
   writeFile(SPIFFS, "/hello.txt", "Hello_1127");
-  Serial.println("セットアップ");
-
-//https://qiita.com/TwDaiki/items/e8661b35eccc0c227504
-//  String response = getResponse("https://cf239798.cloudfree.jp/led.txt");
-  String response = getResponse("http://cf239798.cloudfree.jp/led.txt");
-  Serial.println(response);
-
+  Serial.println("setup終了");
 }
 
 void loop() {
@@ -238,10 +195,9 @@ void loop() {
     wifiReadFlag = 0;
   }
 
-  if(wifiReadFlag == 1){
-    
-//    WiFiClient client = getWiFiClient("xxx", "xxx");//ssid と password を設定する    
-//    String response = getResponse(client, "https://cf239798.cloudfree.jp/led.txt");    
+  if (wifiReadFlag == 1) {
+    String response = "れすぽんす";//getResponse("http://cf239798.cloudfree.jp/led.txt");
+    Serial.println(response);
     if (g10 == 0)
     {
       Serial.println("g10 == 0");
@@ -257,7 +213,7 @@ void loop() {
       r10 = 20;
       g10 = 20;
       b10 = 0;
-      readFile(SPIFFS, "/hello.txt");
+      //readFile(SPIFFS, "/hello.txt");
     }
 
     Serial.println("パターン更新用のスイッチ");
