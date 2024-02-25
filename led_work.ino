@@ -3,7 +3,7 @@
 #include "SPIFFS.h"
 #define FORMAT_SPIFFS_IF_FAILED true
 
-//include "BluetoothSerial.h"
+#include "BluetoothSerial.h"
 
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
@@ -164,7 +164,9 @@ void setup() {
     Serial.println("SPIFFS Mount Failed");
     return;
   }
-  writeFile(SPIFFS, "/hello.txt", "Hello_1127");
+//  writeFile(SPIFFS, "/hello.txt", "Hello_1127");
+  getFileLines(SPIFFS, "/hello.txt");  
+  Serial.println("hello.txt の中身 : " + fileText);
   Serial.println("setup終了");
 }
 
@@ -197,6 +199,10 @@ void loop() {
 
   if (wifiReadFlag == 1) {
     String response = "れすぽんす";//getResponse("http://cf239798.cloudfree.jp/led.txt");
+    
+    char Buf[50];
+    response.toCharArray(Buf, 50);
+    writeFile(SPIFFS, "/hello.txt", Buf);
     Serial.println(response);
     if (g10 == 0)
     {
